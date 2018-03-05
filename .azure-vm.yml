@@ -1,0 +1,17 @@
+name: $(TeamProject)_$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+resources:
+- repo: self
+queue:
+  name: Hosted
+variables:
+  GroupName: 'VSTS-Builder'
+steps:
+- task: AzureResourceGroupDeployment@2
+  inputs:
+    azureSubscription: MyAzure
+    resourceGroupName: '$(GroupName)'
+    location: 'West Europe'
+    csmFile: template.json
+    csmParametersFile: parameters.json
+    overrideParameters: '-adminPassword $(Password)'
+    enableDeploymentPrerequisites: ConfigureVMwithWinRM
